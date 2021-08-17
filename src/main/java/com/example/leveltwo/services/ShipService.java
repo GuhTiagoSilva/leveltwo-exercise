@@ -6,6 +6,7 @@ import com.example.leveltwo.model.Satellite;
 import com.example.leveltwo.model.Ship;
 import com.example.leveltwo.repositories.SatelliteRepository;
 import com.example.leveltwo.repositories.ShipRepository;
+import com.example.leveltwo.services.exceptions.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,9 @@ public class ShipService {
     private SatelliteRepository satelliteRepository;
 
     @Transactional
-    public ShipDTO insert (ShipDTO dto){
+    public ShipDTO insert (ShipDTO dto) {
+        if(dto.getSatellites().size() == 0)
+            throw new ValidationException("Validation Exception");
         Ship ship = new Ship();
         copyDtoToEntity(dto, ship);
         return new ShipDTO(ship);
